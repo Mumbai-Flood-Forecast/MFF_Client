@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import MMRDA_data from '@/public/data/MMRDA';
+import { GeoJSON } from 'react-leaflet';
 
 import 'leaflet/dist/leaflet.css';
 
@@ -30,6 +32,7 @@ function CrowdSrouce() {
                             attribution="Map tiles by Carto, under CC BY 3.0. Data by OpenStreetMap, under ODbL."
                             url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
                         />
+                        <GeoJSON data={MMRDA_data} />
                     </MapContainer>
                 </div>
             </div>
