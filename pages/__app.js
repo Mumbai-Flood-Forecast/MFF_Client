@@ -1,7 +1,7 @@
-// import 'leaflet/dist/leaflet.css';
+import 'leaflet/dist/leaflet.css';
 
-// function MyApp({ Component, pageProps }) {
-//   return <Component {...pageProps} />
-// }
+function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />
+}
 
-// export default MyApp
+export default MyApp
