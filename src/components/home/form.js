@@ -41,7 +41,7 @@ function Form() {
   
       console.log('sendata:',sendata);
       try {
-          const response = await axios.post(process.env.API_URL || 'http://localhost:8000/crowdsource/data/', sendata );
+          const response = await axios.post(process.env.API_URL || 'http://192.168.0.114:8000/crowdsource/data/', sendata );
           setMessage(response.data.message);
       } catch (error) {
           console.error('Error storing data:', error);
@@ -55,17 +55,17 @@ function Form() {
     };
 
     return (
-            <div className="max-w-4xl mx-auto p-6 bg-black rounded-lg shadow-md bg-opacity-40">
+            <div className="max-w-xl mx-auto px-6 py-2 bg-black rounded-lg  bg-opacity-40">
                 <h1 className="text-3xl text-center font-semibold mb-6 text-white">Submit Data</h1>
                 <div>
-                    <label htmlFor="name" className="block text-white mb-2">Name:</label>
+                    <label htmlFor="name" className="block text-white ">Name:</label>
                     <input type="text" id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} className="w-full border rounded-md py-2 px-4 mb-4 bg-blue-50 text-slate-900" />
 
-                    <label htmlFor="height" className="block text-white mb-2">your Height (cm):</label>
-                    <input type="number" id="height" name="height" value={height} onChange={(e) => setHeight(e.target.value)} className="w-full border rounded-md py-2 px-4 mb-4 bg-blue-50 text-white" required />
+                    <label htmlFor="height" className="block text-white">Your Height (cm):</label>
+                    <input type="number" id="height" name="height" value={height} onChange={(e) => setHeight(e.target.value)} className="w-full border rounded-md py-2 px-4 mb-4 bg-blue-50 text-slate-900" required />
 
                     <div className="mb-4">
-                        <span className="block mb-2 text-white">Water Level (choose one):</span>
+                        <span className="block text-white">Water Level (choose one):</span>
                         <div className="flex justify-evenly">
                             <label htmlFor="waterlevel1" className={`inline-block border-2 ${activeOption === 1 ? "border-blue-800" : "border-transparent hover:border-blue-100 "}`} onClick={handleOption(0.2, 1)}>
                                 <img src="/img/crowdsource/1.svg" width={100} height={100} alt="Low water level" />
@@ -85,10 +85,10 @@ function Form() {
                         </div>
                     </div>
 
-                    <label htmlFor="location" className="block text-white mb-2">Location:</label>
-                    <input type="text" id="location" name="location" value={location} onChange={(e) => setLocation(e.target.value)} className="w-full border rounded-md py-2 px-4 mb-4 bg-blue-50 text-white" />
+                    <label htmlFor="location" className="block text-white ">Location:</label>
+                    <input type="text" id="location" name="location" value={location} onChange={(e) => setLocation(e.target.value)} className="w-full border rounded-md py-2 px-4 mb-4 bg-blue-50 text-slate-900" />
 
-                    <button onClick={handleSubmit} className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Submit</button>
+                    <button onClick={handleSubmit} className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Submit</button> 
                 </div>
                 <div className="mt-4 text-white">{message}</div>
             </div>

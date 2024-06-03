@@ -6,6 +6,7 @@ import clou from '../../icons/cloudy.png';
 import img1 from '../../icons/download.png'; // Add your image imports here
 import img2 from '../../icons/download.png';
 import img3 from '../../icons/download.png';
+import plac from '../../icons/placeholder1.png';
 
 export default function RainfallWidget({ selectedOption }) {
     const [data, setData] = useState(null);
@@ -25,42 +26,37 @@ export default function RainfallWidget({ selectedOption }) {
     }
 
     return (
-        <div className='relative text-xl w-max bg-black bg-opacity-20 rounded-xl text-white h-max mx-2 my-0 flex flex-col p-10 shadow-lg z-10'>
-            <div className='relative flex justify-evenly'>
+        <div className='relative text-xl min-w-[30vw] max-w-[40rem] bg-black bg-opacity-80 rounded-xl h-max mx-0 my-0 flex flex-col p-2 py-4 shadow-lg z-10'>
+            <div className='relative flex justify-center '>
                 {/* Display current date, time, and temperature */}
-                <div className='w-1/3 flex justify-evenly'>
-                    <div className='flex flex-col text-center'>
-                        <img src={clou} alt="IIT Logo" width="48" height="48" align="center"/>
-                        <span style={{ fontSize: '2rem', color: '#ff4500', marginTop: '5px' }}>{data.data.temperature}°C</span>                        
-                    </div>
-                </div>
-                <div className='w-1/3 flex justify-evenly flex-col text-center'>
-                    <span className='mx-auto'>                    
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                    </span>
+                <div className='w-1/3 flex justify-evenly text-sm text-white  font-bold flex-col text-center'>
+                                      
+                    <img src={plac} alt="IIT Logo" width="40" height="40" className='mx-14'/>
+                    
                     {data.station.name}
                 </div>
-                <div className='w-1/3 flex justify-evenly'>
+                <div className='w-1/3 flex justify-evenly mx-0'>
                     <div className='flex flex-col text-center'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#47a0ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="feather feather-droplets"><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/></svg>
-                        {data.data.humidity}
+                        <button className=" zigzag-button alert-button" onClick={() => alert('Report Flood')}>
+                            Report Flood
+                        </button>
                     </div>
+                </div>
+                <div className='w-1/3 flex justify-evenly mx-0'>
                     <div className='flex flex-col text-center'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#47a0ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="feather feather-barometer"><path d="M12 20V10m0 10a8 8 0 0 0 8-8 8 8 0 0 0-16 0 8 8 0 0 0 8 8Z"/></svg>
-                        {data.data.pressure}
+                        <img src={clou} alt="IIT Logo" width="30" height="30" align="center" className='mx-2'/>
+                        <span className='text-white text-lg font-bold'>{data.data.temperature}°C</span>                        
                     </div>
                 </div>
             </div>
-            {/* New charts */}
-            <br></br>
-            <div className='flex align-bottom justify-center h-max relative'>
+            <div className='flex-col align-bottom justify-center h-max relative'>
                 <RainfallBarChart />
             </div>
-            <div className='flex align-bottom justify-center h-max'>
+            <div className='flex-col align-bottom justify-center h-max'>
                 <DailyPredictionChart />
             </div>
             <button 
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+                className="btoon hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4"
                 onClick={() => setModalOpen(true)}
             >
                 View Past Rainfall
@@ -90,42 +86,53 @@ export default function RainfallWidget({ selectedOption }) {
 // Options for the new charts
 const barChartOptions = {
     title: "Hourly Rainfall Forecast",
-    titleTextStyle: { color: "#fff", fontSize: 14, bold: true },
+    titleTextStyle: { color: "white", fontSize: 16, alignment: 'center' },
+    
     hAxis: { 
-        title: "Time", 
         titleTextStyle: { color: "#fff" }, 
-        textStyle: { color: "#fff" },
+        textStyle: { color: "white", fontSize: 10 },
         slantedText: true,
-        slantedTextAngle: 90
+        slantedTextAngle: 90,
     },
     vAxis: { 
         title: "Rainfall (mm)",
         titleTextStyle: { color: "#fff" },
-        textStyle: { color: "#fff" }, 
-        minValue: 0 
+        textStyle: { color: "white", fontSize: 10 }, 
+        minValue: 0,
+        gridlines: { count: 6, color: '#ccc', width: '0.1px' }, // Add 6 horizontal reference lines
     },
-    chartArea: { width: "90%", height: "70%" },
+    chartArea: { width: "90%", height: "50%" },
     backgroundColor: 'transparent',
-    colors: ['#76A7FA', '#ff4500'],
+    legend: { position: 'bottom', alignment: 'center', textStyle: { color: '#fff' } },
+    colors: ['#D4D4D4', '#7E8EF1'],
     isStacked: true,
 };
 
 const dailyPredictionOptions = {
     title: "Daily Rainfall Forecast",
-    titleTextStyle: { color: "#fff", fontSize: 16, bold: true, align: 'center' },
+    titleTextStyle: { color: "#fff", fontSize: 16 },
     hAxis: { 
-        title: "Day", 
         titleTextStyle: { color: "#fff" }, 
-        textStyle: { color: "#fff" } 
+        textStyle: { color: "#fff" },
+        slantedTextAngle: 0,
+        textStyle: { color: "#fff" }, fontSize: 8,
     },
     vAxis: { 
         title: "Rainfall (mm)",  
         titleTextStyle: { color: "#fff" },
-        textStyle: { color: "#fff" }, fontSize: 16,
-        minValue: 0 
+        textStyle: { color: "#fff" }, fontSize: 8,
+        minValue: 0,
+        gridlines: { color: 'none' } 
     },
-    chartArea: { width: "80%", height: "70%" },
+    chartArea: { width: "90%", height: "50%" },
     backgroundColor: 'transparent',
+    // legend: { position: 'down', alignment: 'end', textStyle: { color: '#fff' } }, 
+    // series: {
+    //     0: { color: 'green', labelInLegend: '0 to 7 mm' },
+    //     1: { color: 'yellow', labelInLegend: '7 to 36 mm' },
+    //     2: { color: 'orange', labelInLegend: '36 to 124 mm' },
+    //     3: { color: 'red', labelInLegend: 'above 124 mm' },
+    // },
 };
 
 // Dummy data for the new charts
@@ -163,27 +170,40 @@ const rainfallBarChartData = [
     ["3 PM", 0, 5],
 ];
 
+// Dummy data for daily prediction chart with color
 const dailyPredictionChartData = [
-    ["Day", "Rainfall"],
-    ["2 Days Ago", 1.5],
-    ["Day Before Yesterday", 2],
-    ["Yesterday", 2.5],
-    ["Today", 3],
-    ["Tomorrow", 2],
-    ["Day After Tomorrow", 3.5]
+    ["Day", "Rainfall", { role: "style" }],
+    ["2 Days Ago", 1.5, "#00215E"], // Green
+    ["Day Before Yesterday", 2, "#00215E"], // Green
+    ["Yesterday", 50, "#00215E"], // Red
+    ["Today", 150, getColor(150)], // Orange
+    ["Tomorrow", 20, getColor(20)], // Orange
+    ["Day After Tomorrow", 3.5, getColor(3.5)] // Yellow
 ];
+
+// Function to determine color based on rainfall value
+function getColor(rainfall) {
+    if (rainfall > 124) {
+        return "#FF0000"; // Red
+    } else if (rainfall >= 36 && rainfall <= 124) {
+        return "#FFA500"; // Orange
+    } else if (rainfall >= 7 && rainfall < 36) {
+        return "#FFFF00"; // Yellow
+    } else {
+        return "green"; // Green
+    }
+}
 
 function RainfallBarChart() {
     return (
-        
-                <Chart
-                    chartType="ColumnChart"
-                    width="100%"
-                    height="300px"
-                    data={rainfallBarChartData}
-                    options={barChartOptions}
-                />
-            
+        <Chart
+            chartType="ColumnChart"
+            width="100%"
+            height="200px"
+            data={rainfallBarChartData}
+            options={barChartOptions}
+            className='bg-black bg-opacity-20 rounded-xl m-0 font-roboto text-sm'
+        />
     );
 }
 
@@ -191,10 +211,58 @@ function DailyPredictionChart() {
     return (
         <Chart
             chartType="ColumnChart"
-            width="110%"
-            height="250px"
+            width="100%"
+            height="150px"
             data={dailyPredictionChartData}
             options={dailyPredictionOptions}
+            flex="column"
+            className='bg-black bg-opacity-20 rounded-xl mt-2'
         />
     );
 }
+
+// Add this CSS for the button animation and zigzag border
+const styles = `
+<style>
+.btoon{
+    background-color: #C39898;
+
+}
+    .alert-button {
+        background-color: red;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        animation: pulse 1s infinite;
+    }
+
+    .zigzag-button {
+        position: relative;
+        background-color: red;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        border: none;
+        z-index: 1;
+        overflow: hidden;
+        border-radius: 30px;
+        clip-path: polygon(
+            5% 0%, 10% 10%, 15% 0%, 20% 10%, 25% 0%, 30% 10%, 35% 0%, 40% 10%, 
+            45% 0%, 50% 10%, 55% 0%, 60% 10%, 65% 0%, 70% 10%, 75% 0%, 80% 10%, 
+            85% 0%, 90% 10%, 95% 0%, 100% 10%, 100% 90%, 95% 100%, 90% 90%, 85% 100%, 
+            80% 90%, 75% 100%, 70% 90%, 65% 100%, 60% 90%, 55% 100%, 50% 90%, 
+            45% 100%, 40% 90%, 35% 100%, 30% 90%,30% 90%,30% 90%, 25% 100%, 20% 90%, 15% 100%, 
+            10% 90%, 5% 100%, 0% 90%, 0% 10%
+        );
+    }
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+</style>
+`;
+
+document.head.insertAdjacentHTML('beforeend', styles);
