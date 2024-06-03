@@ -1,11 +1,9 @@
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import MarkerClusterGroup from "react-leaflet-cluster";
-import { useEffect, useState } from "react";
-import { fetchStations } from "../../utils/widgetAPI";
-import { Icon, divIcon, point } from "leaflet";
-import Widget from "./rainfall_widget"; 
+import { Popup, CircleMarker, } from "react-leaflet";
+import { useEffect, useState } from "react";  
 import '../../styles.css';
+
+import { fetchStations } from "../../utils/RainfallApis";
 
 export default function RainFallMap({location, setLocations}) {
   const [stations, setStations] = useState([]);
@@ -32,37 +30,31 @@ export default function RainFallMap({location, setLocations}) {
 
     fetchStationsData();  
   }, []);
-
-  if (!stations) {
-    return <div>.</div>;
-  } else {
+  return (stations.map((station, index) => {
+    let color;
+    if (station.curr_rainfall < 10) {
+      color = 'green';
+    } else if (station.curr_rainfall < 20) {
+      color = 'yellow';
+    } else if (station.curr_rainfall < 30) {
+      color = 'orange';
+    } else {
+      color = 'red';
+    }
+  
     return (
-      <>
-            {stations.map((station, index) => (
-              <Marker
-                key={index}
-                position={{ lat: station.latitude, lng: station.longitude }}
-                icon={customIcon}
-                eventHandlers={{ click: () => handleMarkerClick(station) }}
-              >
-                <Popup className="popup-content">{station.name}</Popup>
-              </Marker>
-            ))}
-        </>
+      <CircleMarker
+        key={index}
+        center={{ lat: station.latitude, lng: station.longitude }}
+        color='black'
+        fillColor={color}
+        fill={true}
+        fillOpacity={1}
+        radius={10}
+        eventHandlers={{ click: () => handleMarkerClick(station) }}
+      >
+        <Popup className="popup-content">{station.name}</Popup>
+      </CircleMarker>
     );
-  }
+  }));
 }
-
-const customIcon = new Icon({
-  iconUrl: require("../../icons/placeholder1.png"),
-  iconSize: [25, 25 ] 
-});
-
-
-const createClusterCustomIcon = function (cluster) {
-  return new divIcon({
-    html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
-    className: "custom-marker-cluster",
-    iconSize: point(33, 33, true)
-  });
-};

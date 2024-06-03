@@ -8,9 +8,15 @@ import RainfallWidget from '../components/home/rainfall_widget';
 import WaterlevelWidget from '../components/home/waterlevel_widget';
 
 function Home() {
-    const [selectedTab, setSelectedTab] = useState(1);
+    const [selectedTab, setSelectedTab] = useState(parseInt(localStorage.getItem('selectedTab')) || 1);
+
     const [rainfallLocations, setRainfallLocations] = useState(null);
     const [waterlevelLocations, setWaterlevelLocations] = useState(null);
+
+    const handletabChange = (tab) => {
+        setSelectedTab(tab);
+        localStorage.setItem('selectedTab', tab);
+    }
 
     return (
         <div className='h-screen w-screen'>
@@ -20,7 +26,7 @@ function Home() {
                         className={`h-[2rem] w-[6rem] flex flex-col justify-center text-center font-serif cursor-pointer rounded-l-xl transition-all duration-300 ${
                             selectedTab === 1 ? 'bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-lg' : 'bg-gray-100 hover:bg-gray-200'
                         }`}
-                        onClick={() => setSelectedTab(1)}
+                        onClick={() => handletabChange(1)}
                     >
                         Rainfall
                     </span>
@@ -28,7 +34,7 @@ function Home() {
                         className={`h-[2rem] w-[6rem] flex flex-col justify-center text-center font-serif cursor-pointer transition-all duration-300 ${
                             selectedTab === 2 ? 'bg-gradient-to-r from-red-500 to-red-700 text-white shadow-lg' : 'bg-gray-100 hover:bg-gray-200'
                         } border-r border-l border-gray-800`}
-                        onClick={() => setSelectedTab(2)}
+                        onClick={() => handletabChange(2)}
                     >
                         Waterlevel
                     </span>
@@ -36,7 +42,7 @@ function Home() {
                         className={`h-[2rem] w-[6rem] flex flex-col justify-center text-center  font-serif cursor-pointer rounded-r-xl transition-all duration-300 ${
                             selectedTab === 3 ? 'bg-gradient-to-r from-green-500 to-green-700 text-white shadow-lg' : 'bg-gray-100 hover:bg-gray-200'
                         }`}
-                        onClick={() => setSelectedTab(3)}
+                        onClick={() => handletabChange(3)}
                     >
                         Public Data
                     </span>
@@ -60,7 +66,7 @@ function Home() {
                             maxZoom={19}
                         />
                         {selectedTab === 1 && <RainFallMap setLocations={setRainfallLocations} location={rainfallLocations} />}
-                        {selectedTab === 2 && <WaterlevelMap setLocations={setWaterlevelLocations} location={waterlevelLocations} />}
+                        {selectedTab === 2 && <WaterlevelMap />}
                         {selectedTab === 3 && <Map />}
                     </MapContainer>
 
@@ -70,9 +76,9 @@ function Home() {
                         </div>
                     )}
 
-                    {selectedTab === 2 && waterlevelLocations && (
+                    {selectedTab === 2 && (
                         <div className="absolute top-24 left-2 z-20">
-                            <WaterlevelWidget selectedOption={waterlevelLocations} />
+                            <WaterlevelWidget location={waterlevelLocations} setLocation={setWaterlevelLocations} />
                         </div>
                     )}
 

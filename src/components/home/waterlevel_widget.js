@@ -1,34 +1,32 @@
-import React, { useState } from 'react';
-import { Button, Modal } from 'react-bootstrap'; // Import Bootstrap components for modal and buttons
-import TimeSeriesChart from './TimeSeriesChart'; // Import your TimeSeriesChart component
-import stationImage from '../../icons/download.png'; // Path to your station image
+import React, { useState, useEffect } from 'react';
+import { Button } from 'react-bootstrap'; 
 import plac from '../../icons/aa.png';
+import { fetchWaterStations } from '../../utils/WaterlevelApis';
 
-export default function WaterlevelMap({ selectedOption, width, height }) {
-    const [showModal, setShowModal] = useState(false); // State to manage modal visibility
-    const [selectedStation, setSelectedStation] = useState(null); // State to track selected station
 
-    // Dummy station data
-    const stations = [
-        { name: "Andheri Subway (bandh)" },
-        { name: "Andheri Subway Pole (Alternate location)" },
-        { name: "Gandhi Market below the King Circle bridge" },
-        { name: "Hindmata (Pole 1)" },
-        { name: "Khar Subway" },
-        { name: "Khar subway (alternate location pole)" },
-        { name: "Mumbai university" },
-        { name: "Nair Hospital (Outside HDFC bank)" },
-        { name: "Nair hospital (alternate location street pole)" },
-    ];
+export default function WaterlevelMap({ width, height, setLocation, location }) {
 
-    // Function to handle station button click
+    const [stations, setStations] = useState([]);
+
+    useEffect(() => {
+        const fetchStationsData = async () => {
+          try {
+            const data = await fetchWaterStations();
+            setStations(data);
+          } catch (error) {
+            console.error("Error fetching stations:", error);
+          }
+        };
+    
+        fetchStationsData();
+      } , []);
+
     const handleStationClick = (station) => {
-        setSelectedStation(station);
-        setShowModal(true);
+        setLocation(station);
     };
 
     return (
-        <div className='text-xl w-max bg-black rounded-xl bg-opacity-40 text-white h-max mx-0 my-0 flex flex-col p-4 shadow-lg z-10 ' style={{ width, height }}>
+        <div className='text-xl w-max bg-black rounded-xl bg-opacity-80 text-white h-max mx-0 my-0 flex flex-col p-4 shadow-lg z-10 ' style={{ width, height }}>
             <div className='relative flex justify-center '>
                 {/* Display current date, time, and temperature */}
                 <div className='w-1/2 flex justify-evenly text-xs text-amber-400  font-bold flex-col text-center'>
@@ -47,15 +45,14 @@ export default function WaterlevelMap({ selectedOption, width, height }) {
             </div>
 
             <div className=' justify-center flex-col gap-1 position-relative'>
-                {/* Map through stations and render buttons */}
                 {stations.map((station, index) => (
                     <Button
                         key={index}
                         variant="primary"
                         onClick={() => handleStationClick(station)}
                         style={{
-                            backgroundColor: 'transparent', // Transparent background color
-                            borderColor: '#EE4E4E', // Blue border color
+                            backgroundColor: location === station ? '#EE4E4E' : 'transparent',
+                            borderColor: '#EE4E4E',
                             color: '#ffffff', // White text color
                             borderRadius: '10px',
                             fontWeight: 'bold', // Rounded corners
@@ -67,67 +64,11 @@ export default function WaterlevelMap({ selectedOption, width, height }) {
                             borderStyle: 'solid', // Added border style
                             borderWidth: '2px',
                         }}
-                        onMouseEnter={(e) => e.target.style.backgroundColor = '#EE4E4E'} // Change background color on hover
-                        onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'} // Restore background color on mouse leave
                     >
                         {station.name}
                     </Button>
                 ))}
             </div>
-            {/* Modal for displaying station image and time series chart */}
-            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>{selectedStation?.name}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <img src={stationImage} alt="Station" className="w-100 mb-3" />
-                    <TimeSeriesChart />
-                </Modal.Body>
-            </Modal>
         </div>
     );
 }
-const styles = `
-<style>
-.btoon{
-    background-color: #C39898;
-
-}
-    .alert-button {
-        background-color: red;
-        color: white;
-        font-weight: bold;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        animation: pulse 1s infinite;
-    }
-
-    .zigzag-button {
-        position: relative;
-        background-color: red;
-        color: white;
-        font-weight: bold;
-        padding: 10px;
-        border: none;
-        z-index: 1;
-        overflow: hidden;
-        border-radius: 30px;
-        clip-path: polygon(
-            5% 0%, 10% 10%, 15% 0%, 20% 10%, 25% 0%, 30% 10%, 35% 0%, 40% 10%, 
-            45% 0%, 50% 10%, 55% 0%, 60% 10%, 65% 0%, 70% 10%, 75% 0%, 80% 10%, 
-            85% 0%, 90% 10%, 95% 0%, 100% 10%, 100% 90%, 95% 100%, 90% 90%, 85% 100%, 
-            80% 90%, 75% 100%, 70% 90%, 65% 100%, 60% 90%, 55% 100%, 50% 90%, 
-            45% 100%, 40% 90%, 35% 100%, 30% 90%,30% 90%,30% 90%, 25% 100%, 20% 90%, 15% 100%, 
-            10% 90%, 5% 100%, 0% 90%, 0% 10%
-        );
-    }
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-        100% { transform: scale(1); }
-    }
-</style>
-`;
-
-document.head.insertAdjacentHTML('beforeend', styles);

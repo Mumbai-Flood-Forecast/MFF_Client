@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Chart } from 'react-google-charts';
 import axios from 'axios';
-import { fetchAllData } from '../../utils/widgetAPI';
+import { fetchAllData } from '../../utils/RainfallApis';
 import clou from '../../icons/cloudy.png';
 import img1 from '../../icons/download.png'; // Add your image imports here
 import img2 from '../../icons/download.png';
